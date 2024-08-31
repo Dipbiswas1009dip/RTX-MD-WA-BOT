@@ -1,0 +1,34 @@
+services:
+  - type: web
+    name: levanter
+    env: node
+    plan: free  # আপনার প্রয়োজন অনুযায়ী এখানে অন্য প্ল্যান নির্বাচন করতে পারেন
+    buildCommand: 
+      - yarn install
+      - yarn run build  # যদি আপনি কোনো build স্ক্রিপ্ট ব্যবহার করেন
+    startCommand: yarn start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000  # আপনার অ্যাপ্লিকেশন যে পোর্টে চলবে
+
+    # যদি কোনো ডেটাবেস যুক্ত করতে হয় তবে এটি যোগ করুন
+    databases:
+      - name: levanter-db
+        plan: free  # এখানে প্রয়োজন অনুযায়ী প্ল্যান পরিবর্তন করতে পারেন
+        type: postgresql
+
+    # যদি কোনো ক্রন জব ব্যবহার করেন
+    cronJobs:
+      - name: example-cron-job
+        schedule: "@daily"
+        command: "node cronScript.js"
+        timezone: "UTC"
+
+    # persistent disk যুক্ত করতে হলে
+    disk:
+      name: levanter-disk
+      mountPath: /data
+      sizeGB: 1  # প্রয়োজন অনুসারে আকার দিন
+
